@@ -43,9 +43,6 @@
 		"trailingComma": "all"
 	},
 	"config": {
-		"cz-customizable": {
-			"config": "./config/cz-config.js"
-		},
 		"commitizen": {
 			"path": "node_modules/cz-customizable"
 		}
