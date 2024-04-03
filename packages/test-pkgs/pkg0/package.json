@@ -1,0 +1,21 @@
+{
+	"$schema": "https://json.schemastore.org/package",
+	"publishConfig": {
+		"access": "public"
+	},
+	"name": "@accurtype/test-pkg-0",
+	"version": "1.1.0-dev.moreSpeak",
+	"description": "测试用的包",
+	"type": "module",
+	"main": "index.js",
+	"files": [
+		"index.js"
+	],
+	"author": "e0selmy4v",
+	"license": "MIT",
+	"repository": {
+		"directory": "utilities/test-pkgs/pkg0",
+		"type": "git",
+		"url": "git+https://github.com/accurtype/accurtype.git"
+	}
+}
