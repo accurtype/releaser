@@ -11,7 +11,7 @@ const config = {
 		'@typescript-eslint',
 		'markdown',
 	],
-	rules: { 'no-unused-vars': 'warn' },
+	rules: { 'no-unused-vars': 'off' },
 	root: true,
 	parserOptions: {
 		project: ['./packages/*/tsconfig.json'],
