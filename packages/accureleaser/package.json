@@ -6,7 +6,7 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "tsc",
-		"clear": "rimraf -g lib/**/*.d.ts test/**/*.d.ts"
+		"clear": "rimraf -g lib/**/*.d.ts test/**/*.d.ts lib/**/*.js test/**/*.js"
 	},
 	"files": [
 		"index.js"

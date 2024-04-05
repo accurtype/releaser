@@ -1,5 +1,5 @@
-import Releaser from '../lib/index.js';
-import { dir } from './helper.js';
+import Releaser from '../lib/index';
+import { dir } from './helper';
 
 const releaser = new Releaser(dir);
 

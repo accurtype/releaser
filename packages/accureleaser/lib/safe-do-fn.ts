@@ -1,4 +1,3 @@
-/**@enum {string} */
 const errId = {
 	myPackageJSON: 'Failed to read the package.json of accurtype-releaser',
 	osNotRealTempDir: 'Cannot get OS\' temp dir',
@@ -13,17 +12,11 @@ const errId = {
 	getNpmInfo: 'Cannot get npm info of the package',
 };
 
-/**
- * 方便地安全使用函数
- * @typedef {<T, P extends any[]>(fn: (...args: P) => T) => (...args: P) => Promise<T>} SafeDoer
- */
+/**方便地安全使用函数 */
+type SafeDoer = <T, P extends any[]>(fn: (...args: P) => T) => (...args: P) => Promise<T>;
 
-/**
- * 生成安全函数
- * @param {errId} msg 错误提示
- * @returns {SafeDoer}
- */
-function genSafeDoer(msg) {
+/**生成安全函数 */
+function genSafeDoer(msg: string): SafeDoer {
 	return fn => {
 		return async (...args) => {
 			try {
@@ -35,12 +28,8 @@ function genSafeDoer(msg) {
 	};
 }
 
-/**@type {{[I in keyof typeof errId]: SafeDoer}} */
-// @ts-ignore
-const safe = {};
-/**@type {(keyof typeof errId)[]} */
-// @ts-ignore
-const keys = Object.keys(errId);
+const safe = {} as { [I in keyof typeof errId]: SafeDoer; };
+const keys = Object.keys(errId) as (Extract<keyof typeof errId, string>)[];
 keys.forEach(k => safe[k] = genSafeDoer(errId[k]));
 
 export default safe;
