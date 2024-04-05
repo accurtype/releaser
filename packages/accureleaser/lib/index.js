@@ -29,13 +29,13 @@ export default class Releaser {
 	 * @private
 	 */
 	async init(rootDir) {
-		const osNotRealTempDir = await safe.osNotRealTempDir(os.tmpdir);
-		const osTempDir = `${await safe.osTempDir(fsp.realpath, [osNotRealTempDir])}`;
-		const tempDir = `${await safe.tempDir(fsp.mkdtemp, [path.join(osTempDir, `${filenamify(myPackageJSON.name)}-`)])}`;
-		await safe.moveGit(fsp.cp, [path.join(rootDir, '.git'), path.join(tempDir, '.git'), { recursive: true }]);
+		const osNotRealTempDir = await safe.osNotRealTempDir(os.tmpdir)();
+		const osTempDir = `${await safe.osTempDir(fsp.realpath)(osNotRealTempDir)}`;
+		const tempDir = `${await safe.tempDir(fsp.mkdtemp)(path.join(osTempDir, `${filenamify(myPackageJSON.name)}-`))}`;
+		await safe.moveGit(fsp.cp)(path.join(rootDir, '.git'), path.join(tempDir, '.git'), { recursive: true });
 		const git = getGit(tempDir);
-		await safe.recoverGit(() => git.raw('restore', '.'));
-		const packages = await safe.packages(getPackages, [tempDir]);
+		await safe.recoverGit(() => git.raw('restore', '.'))();
+		const packages = await safe.packages(getPackages)(tempDir);
 		return { osNotRealTempDir, osTempDir, tempDir, git, packages, rootDir };
 	}
 	/**
@@ -45,7 +45,7 @@ export default class Releaser {
 	 */
 	async cleanTemp() {
 		const { tempDir } = await this.initer;
-		await safe.cleanTemp(fsp.rm, [tempDir, { recursive: true, force: true }]);
+		await safe.cleanTemp(fsp.rm)(tempDir, { recursive: true, force: true });
 	}
 
 	[Symbol.dispose] = () => this.cleanTemp();
@@ -59,7 +59,7 @@ export default class Releaser {
 	 */
 	async checkoutPackageJson(dir) {
 		const { git } = await this.initer;
-		return JSON.parse(`${await safe.checkoutPackage(() => git.checkoutFile('HEAD^', `${dir}/package.json`))}`);
+		return JSON.parse(`${await safe.checkoutPackage(git.checkoutFile)('HEAD^', `${dir}/package.json`)}`);
 	}
 	/**
 	 * 检查当前提交的版本是否需要被发布
@@ -67,7 +67,7 @@ export default class Releaser {
 	 */
 	async isUniqueVersion({ dir, packageJson: { version, name } }) {
 		if ((await this.checkoutPackageJson(dir)).version === version) return false;
-		if ((await safe.getNpmInfo(view, [name])).versions.include(version)) return false;
+		if ((await safe.getNpmInfo(view)(name)).versions.include(version)) return false;
 		return true;
 	}
 	/**
@@ -80,7 +80,7 @@ export default class Releaser {
 		for (const packageInfo of packages.packages) {
 			if (packageInfo.packageJson.private ?? false) continue;
 			if (
-				await safe.checkPackage(() => git.isNewed(`${packageInfo.dir}/package.json`))
+				await safe.checkPackage(git.isNewed)(`${packageInfo.dir}/package.json`)
 				|| await this.isUniqueVersion(packageInfo)
 			) signeds.add(packageInfo);
 		}

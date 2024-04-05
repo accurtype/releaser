@@ -15,11 +15,7 @@ const errId = {
 
 /**
  * 方便地安全使用函数
- * @typedef {<T, P extends any[]>(
- *   ...args: P extends []
- *     ? [fn: (...args: P) => T]
- *     : [fn: (...args: P) => T, args: P]
- * ) => Promise<T>} SafeDoer
+ * @typedef {<T, P extends any[]>(fn: (...args: P) => T) => (...args: P) => Promise<T>} SafeDoer
  */
 
 /**
@@ -28,12 +24,14 @@ const errId = {
  * @returns {SafeDoer}
  */
 function genSafeDoer(msg) {
-	return async (fn, args = []) => {
-		try {
-			return await fn(...args);
-		} catch (cause) {
-			throw Error(msg, { cause });
-		}
+	return fn => {
+		return async (...args) => {
+			try {
+				return await fn(...args);
+			} catch (cause) {
+				throw Error(msg, { cause });
+			}
+		};
 	};
 }
 
