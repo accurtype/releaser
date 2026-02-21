@@ -5,6 +5,8 @@
 	"description": "「精确类型」自动发布工具",
 	"main": "index.js",
 	"scripts": {
+		"dry-test": "echo hh",
+		"wet-test": "echo hh",
 		"build": "tsc",
 		"clear": "rimraf -g lib/**/*.d.ts test/**/*.d.ts lib/**/*.js test/**/*.js"
 	},
