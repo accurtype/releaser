@@ -1,3 +1,8 @@
 **/node_modules
 package-lock.json
 pnpm-lock.yaml
+*.swp
+**/dist
+**/.nyc_output
+packages/*/coverage
+

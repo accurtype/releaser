@@ -1,7 +1,20 @@
-const { RuleConfigSeverity } = require('@commitlint/types');
-const czConfig = require('./.cz-config');
+import { UserConfig, RuleConfigSeverity } from '@commitlint/types';
+import * as czConfig from './cz-config.cjs';
 
-const config = {
+function allList<T>(s: Set<T>): Set<T[]> {
+	const r = new Set<T[]>([[]]);
+	s.forEach(k => {
+		const b = new Set(s);
+		b.delete(k);
+		allList(b).forEach(n => r.add([k, ...n]));
+	});
+	return r;
+}
+const scpoeEnum = [
+	...allList(new Set(czConfig.scopes.map(({ name }) => name))),
+].map(n => n.join(', '));
+
+const config: UserConfig = {
 	/*
 	 * Resolve and load conventional-changelog-atom from node_modules.
 	 * Referenced packages must be installed
@@ -17,16 +30,16 @@ const config = {
 	 */
 	rules: {
 		'body-leading-blank': [RuleConfigSeverity.Error, 'always'],
-		'scope-enum': [RuleConfigSeverity.Error, 'always', czConfig.scopes.map(({ name }) => name)],
+		'scope-enum': [RuleConfigSeverity.Error, 'always', scpoeEnum],
 		'subject-empty': [RuleConfigSeverity.Error, 'never'],
 		'type-enum': [RuleConfigSeverity.Error, 'always', czConfig.types.map(({ value }) => value)],
-		'type-case': [RuleConfigSeverity.Error, 'always', 'pascal-case'],
+		'type-case': [RuleConfigSeverity.Error, 'always', 'kebab-case'],
 		'type-empty': [RuleConfigSeverity.Error, 'never'],
 	},
 	/*
 	 * Functions that return true if commitlint should ignore the given message.
 	 */
-	ignores: [commit => commit === ''],
+	ignores: [(commit: string) => commit === ''],
 	/*
 	 * Whether commitlint uses the default ignore rules.
 	 */
@@ -43,4 +56,4 @@ const config = {
 		questions: { type: { description: 'please input type:' } },
 	},
 };
-module.exports = config;
+export default config;

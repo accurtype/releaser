@@ -2,9 +2,16 @@
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
 		"noErrorTruncation": true,
-		"module": "CommonJS",
-		"moduleResolution": "Node",
+
+		"module": "ESNext",
+		"moduleResolution": "bundler",
 		"target": "ESNext",
+		"resolveJsonModule": true,
+		"allowJs": true,
+		"skipLibCheck": true,
+		"checkJs": true,
+		"allowSyntheticDefaultImports": true,
+
 		"noImplicitAny": true,
 		"noImplicitReturns": true,
 		"strict": true,
@@ -12,14 +19,12 @@
 		"strictFunctionTypes": true,
 		"strictNullChecks": true,
 		"strictPropertyInitialization": true,
+		"strictBuiltinIteratorReturn": true,
 		"alwaysStrict": true,
 		"noImplicitThis": true,
+
 		"noEmitOnError": true,
-		"declaration": true,
-		"resolveJsonModule": true,
-		"allowJs": true,
-		"skipLibCheck": true,
-		"checkJs": true
+		"declaration": true
 	},
-	"include": []
+	"exclude": ["**/dist"]
 }

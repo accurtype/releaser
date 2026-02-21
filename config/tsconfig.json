@@ -1,9 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
-	"extends": "../../tsbase.json",
+	"extends": "./tsbase.json",
 	"compilerOptions": {
-		"emitDeclarationOnly": true,
-		"module": "ESNext"
+		"noEmit": true
 	},
 	"include": ["**/*"]
 }
