@@ -1,28 +1,25 @@
 // @ts-check
 /// <reference types="node" />
+/**@import { ProjectManifest } from '@pnpm/types'; */
 
 const fs = require('fs');
-/**@type {string[]} */
-const notPacks = [
-	'tsconfig.json',
-];
 
-function readPackages() {
-	try {
-		return [
-			...fs.readdirSync(__dirname + '/../packages'),
-			...fs.readdirSync(__dirname + '/../test-pkgs'),
-		];
-	} catch (err) {
-		return [];
+function getPackages() {
+	const filePath = __dirname + '/dist/packages.json';
+	const file = fs.readFileSync(filePath);
+	fs.rmSync(filePath);
+	/**@type {(ProjectManifest & { path: string; name: string; })[]} */
+	const packages = JSON.parse(file.toString());
+	for (const { name, path } of packages) {
+		if (!name) throw Error(path);
 	}
+	return packages;
 }
-
-const packages = [
-	...readPackages(),
-].filter(n => !notPacks.includes(n));
+const packages = getPackages();
 
 const config = {
+	packages,
+
 	types: [
 		{ value: 'init', name: 'init		初始化' },
 		{ value: 'fix', name: 'fix		修复' },
@@ -36,7 +33,7 @@ const config = {
 	],
 	allowBreakingChanges: ['add', 'refactor', 'fix', 'revert'],
 
-	scopes: packages.map(name => ({ name })),
+	scopes: packages.map(({ name }) => ({ name })),
 	allowCustomScopes: true,
 
 	allowTicketNumber: false,

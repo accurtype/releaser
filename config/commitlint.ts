@@ -11,7 +11,7 @@ function allList<T>(s: Set<T>): Set<T[]> {
 	return r;
 }
 const scpoeEnum = [
-	...allList(new Set(czConfig.scopes.map(({ name }) => name))),
+	...allList(new Set(czConfig.packages.map(({ name }) => name))),
 ].map(n => n.join(', '));
 
 const config: UserConfig = {

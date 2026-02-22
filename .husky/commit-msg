@@ -1,2 +1,3 @@
 #! /bin/bash
+pnpm ls-proj
 pnpm --no -- commitlint --edit $1
